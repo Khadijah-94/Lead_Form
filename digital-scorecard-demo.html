@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تشخيص رقمي مجاني</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Cairo',system-ui,sans-serif;background:#f7f6f3;color:#1a1a1a;direction:rtl;min-height:100vh}
+.page{max-width:620px;margin:0 auto;padding:32px 16px 60px}
+.screen{display:none}.screen.on{display:block}
+
+/* inputs */
+input[type=text],select{
+  width:100%;padding:12px 14px;
+  border:1.5px solid #e0ddd6;border-radius:10px;
+  background:#fff;color:#1a1a1a;
+  font-family:'Cairo',system-ui,sans-serif;font-size:15px;
+  direction:rtl;margin-bottom:16px;
+  transition:border-color .2s;outline:none;
+}
+input[type=text]:focus,select:focus{border-color:#C8A84B;}
+
+.lbl{display:block;font-size:13px;font-weight:500;color:#666;margin-bottom:6px}
+
+/* pills */
+.pill-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.pill{
+  padding:10px 6px;border:1.5px solid #e0ddd6;border-radius:10px;
+  text-align:center;cursor:pointer;font-size:13px;font-family:'Cairo',system-ui,sans-serif;
+  color:#666;transition:all .18s;user-select:none;background:#fff;
+}
+.pill.sel{border-color:#C8A84B;background:rgba(200,168,75,.12);color:#7A5C0F;font-weight:600}
+.pill:hover{border-color:#C8A84B}
+
+/* radio options */
+.rlist{display:flex;flex-direction:column;gap:8px;margin-bottom:16px}
+.roption{
+  padding:12px 14px;border:1.5px solid #e0ddd6;border-radius:10px;
+  cursor:pointer;font-size:14px;font-family:'Cairo',system-ui,sans-serif;
+  color:#1a1a1a;transition:all .18s;user-select:none;background:#fff;
+}
+.roption.sel{border-color:#C8A84B;background:rgba(200,168,75,.1);color:#7A5C0F;font-weight:600}
+.roption:hover{border-color:#C8A84B}
+
+/* buttons */
+.btn{
+  width:100%;padding:14px;background:#C8A84B;border:none;border-radius:10px;
+  font-family:'Cairo',system-ui,sans-serif;font-size:16px;font-weight:700;
+  color:#1a1200;cursor:pointer;margin-top:8px;transition:opacity .2s;
+}
+.btn:hover{opacity:.88}
+.btn-ghost{
+  width:100%;padding:10px;background:none;border:none;
+  font-family:'Cairo',system-ui,sans-serif;font-size:14px;color:#999;cursor:pointer;margin-top:4px;
+}
+
+/* progress */
+.prog{display:flex;gap:6px;margin-bottom:26px}
+.seg{height:3px;flex:1;border-radius:2px;background:#e0ddd6;transition:background .3s}
+.seg.on{background:#C8A84B}
+
+/* header tag */
+.tag{
+  display:inline-block;padding:5px 14px;
+  background:rgba(200,168,75,.12);border:1px solid rgba(200,168,75,.35);
+  border-radius:40px;font-size:12px;font-weight:600;color:#8B6914;
+}
+
+/* result cards */
+.card{background:#fff;border:1px solid #e8e5de;border-radius:14px;padding:20px;margin-bottom:12px}
+.card-title{font-size:11px;font-weight:600;color:#aaa;letter-spacing:1.4px;margin-bottom:14px}
+.metric-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.metric{background:#f7f6f3;border-radius:10px;padding:16px 10px;text-align:center}
+.metric-num{font-size:26px;font-weight:700;margin-bottom:3px}
+.metric-lbl{font-size:12px;color:#888;font-weight:500}
+.priority-box{
+  background:rgba(200,168,75,.07);border:1px solid rgba(200,168,75,.25);
+  border-radius:14px;padding:20px;margin-bottom:28px;
+}
+.divider{height:1px;background:#e8e5de;margin:26px 0}
+
+/* spinner */
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
+.spinner{width:46px;height:46px;border:3px solid #e0ddd6;border-top-color:#C8A84B;border-radius:50%;animation:spin 1s linear infinite}
+.dpulse{width:8px;height:8px;border-radius:50%;background:#4caf72;animation:pulse 2s infinite;display:inline-block;vertical-align:middle;margin-left:5px}
+
+/* booking success */
+.success-icon{
+  width:52px;height:52px;border-radius:50%;background:rgba(76,175,114,.15);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 14px;font-size:22px;color:#4caf72;font-weight:700;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══ SCREEN 1 ══ -->
+<div id="s1" class="screen on">
+  <div style="text-align:center;margin-bottom:28px">
+    <span class="tag">تشخيص رقمي مجاني</span>
+    <h1 style="margin-top:14px;font-size:26px;font-weight:900;line-height:1.3">اكتشف مكانك الحقيقي<br>في السوق الرقمي</h1>
+    <p style="margin-top:6px;font-size:15px;color:#666">دقيقتان تكشف وينك؟ — وين تقدر تكون؟</p>
+  </div>
+  <div class="prog"><div class="seg on"></div><div class="seg"></div><div class="seg"></div></div>
+
+  <label class="lbl">اسم البزنس</label>
+  <input type="text" id="bizName" placeholder="مثلاً: مطعم الريان، عيادة الشفاء...">
+
+  <label class="lbl">مجال النشاط</label>
+  <select id="bizSector">
+    <option value="">اختر المجال</option>
+    <option>مطعم أو كافيه</option><option>عيادة أو صحة</option>
+    <option>متجر إلكتروني</option><option>خدمات مهنية</option>
+    <option>تعليم أو تدريب</option><option>عقارات</option>
+    <option>أزياء وموضة</option><option>سياحة وسفر</option><option>أخرى</option>
+  </select>
+
+  <label class="lbl">رابط الموقع <span style="font-weight:400;color:#aaa">(اختياري)</span></label>
+  <input type="text" id="bizWebsite" placeholder="www.example.com">
+
+  <button class="btn" onclick="next1()">التالي</button>
+</div>
+
+<!-- ══ SCREEN 2 ══ -->
+<div id="s2" class="screen">
+  <div class="prog"><div class="seg on"></div><div class="seg on"></div><div class="seg"></div></div>
+
+  <label class="lbl" style="margin-bottom:9px">المنصات المتواجد فيها</label>
+  <div class="pill-grid" id="platGrid">
+    <div class="pill" onclick="togglePill(this)">انستقرام</div>
+    <div class="pill" onclick="togglePill(this)">تيك توك</div>
+    <div class="pill" onclick="togglePill(this)">إكس</div>
+    <div class="pill" onclick="togglePill(this)">لينكدإن</div>
+    <div class="pill" onclick="togglePill(this)">سناب شات</div>
+    <div class="pill" onclick="togglePill(this)">يوتيوب</div>
+  </div>
+
+  <label class="lbl" style="margin-bottom:9px">إجمالي المتابعين (لأكبر منصة)</label>
+  <div class="rlist" id="follList">
+    <div class="roption" onclick="pick('follList',this)">أقل من 500</div>
+    <div class="roption" onclick="pick('follList',this)">500 — 5,000</div>
+    <div class="roption" onclick="pick('follList',this)">5,000 — 50,000</div>
+    <div class="roption" onclick="pick('follList',this)">أكثر من 50,000</div>
+  </div>
+
+  <label class="lbl" style="margin-bottom:9px">كم مرة تنشر أسبوعياً؟</label>
+  <div class="rlist" id="freqList">
+    <div class="roption" onclick="pick('freqList',this)">يومياً أو أكثر</div>
+    <div class="roption" onclick="pick('freqList',this)">3 — 4 مرات</div>
+    <div class="roption" onclick="pick('freqList',this)">مرة واحدة</div>
+    <div class="roption" onclick="pick('freqList',this)">نادراً</div>
+  </div>
+
+  <button class="btn" onclick="next2()">التالي</button>
+  <button class="btn-ghost" onclick="show('s1')">رجوع</button>
+</div>
+
+<!-- ══ SCREEN 3 ══ -->
+<div id="s3" class="screen">
+  <div class="prog"><div class="seg on"></div><div class="seg on"></div><div class="seg on"></div></div>
+
+  <label class="lbl" style="margin-bottom:9px">متوسط التفاعل على البوست الواحد</label>
+  <div class="rlist" id="engList">
+    <div class="roption" onclick="pick('engList',this)">أقل من 10 تفاعلات</div>
+    <div class="roption" onclick="pick('engList',this)">10 — 50 تفاعل</div>
+    <div class="roption" onclick="pick('engList',this)">50 — 200 تفاعل</div>
+    <div class="roption" onclick="pick('engList',this)">أكثر من 200 تفاعل</div>
+  </div>
+
+  <label class="lbl">أكبر تحدٍّ يواجهك</label>
+  <select id="challenge">
+    <option value="">اختر</option>
+    <option>إنتاج محتوى بانتظام</option>
+    <option>ضعف التفاعل والوصول</option>
+    <option>تحويل المتابعين لعملاء</option>
+    <option>بناء هوية بصرية واضحة</option>
+    <option>المنافسة في السوق</option>
+    <option>ضعف الميزانية التسويقية</option>
+  </select>
+
+  <label class="lbl">هدفك الرئيسي خلال 6 أشهر</label>
+  <select id="goal">
+    <option value="">اختر</option>
+    <option>نمو المتابعين وبناء الجمهور</option>
+    <option>زيادة المبيعات والعملاء</option>
+    <option>تقوية البراند والظهور</option>
+    <option>الانتشار في سوق جديد</option>
+    <option>كل ما سبق</option>
+  </select>
+
+  <div class="divider"></div>
+
+  <label class="lbl">اسمك</label>
+  <input type="text" id="userName" placeholder="اسمك الكريم">
+
+  <label class="lbl">إيميل أو واتساب</label>
+  <input type="text" id="userContact" placeholder="للتواصل معك">
+
+  <button class="btn" onclick="submitForm()">ابدأ التحليل</button>
+  <button class="btn-ghost" onclick="show('s2')">رجوع</button>
+</div>
+
+<!-- ══ LOADING ══ -->
+<div id="sLoad" class="screen" style="text-align:center;padding:80px 0">
+  <div class="spinner" style="margin:0 auto 20px"></div>
+  <p id="loadMsg" style="font-size:15px;color:#888">جارٍ تحليل بياناتك...</p>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="sResult" class="screen">
+
+  <!-- Header -->
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px;padding-bottom:18px;border-bottom:1px solid #e8e5de">
+    <div>
+      <div id="rName" style="font-size:20px;font-weight:700"></div>
+      <div id="rDate" style="font-size:12px;color:#aaa;margin-top:3px"></div>
+    </div>
+    <span class="tag">تشخيص رقمي</span>
+  </div>
+
+  <!-- Score circle -->
+  <div style="text-align:center;padding:30px 16px;background:#fff;border:1px solid #e8e5de;border-radius:16px;margin-bottom:14px">
+    <div style="position:relative;width:134px;height:134px;margin:0 auto 14px">
+      <svg width="134" height="134" viewBox="0 0 134 134">
+        <circle cx="67" cy="67" r="57" fill="none" stroke-width="9" stroke="#ede9df"/>
+        <circle cx="67" cy="67" r="57" fill="none" stroke-width="9" stroke="#C8A84B"
+          stroke-linecap="round" stroke-dasharray="358" stroke-dashoffset="358"
+          id="ring" transform="rotate(-90 67 67)" style="transition:stroke-dashoffset 1.4s ease"/>
+      </svg>
+      <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center">
+        <span id="rScore" style="font-size:36px;font-weight:900;color:#8B6914">0</span>
+        <div style="font-size:11px;color:#aaa">/100</div>
+      </div>
+    </div>
+    <div id="rLabel" style="font-size:18px;font-weight:700;margin-bottom:4px"></div>
+    <div style="font-size:13px;color:#888">بناءً على حضورك الرقمي الكامل</div>
+  </div>
+
+  <!-- Sub scores -->
+  <div class="metric-row">
+    <div class="metric"><div id="mSocial" class="metric-num"></div><div class="metric-lbl">السوشيال</div></div>
+    <div class="metric"><div id="mWeb" class="metric-num"></div><div class="metric-lbl">الموقع</div></div>
+    <div class="metric"><div id="mContent" class="metric-num"></div><div class="metric-lbl">المحتوى</div></div>
+  </div>
+
+  <!-- Strengths -->
+  <div class="card">
+    <div class="card-title">نقاط القوة</div>
+    <ul id="rStr" style="list-style:none;display:flex;flex-direction:column;gap:10px"></ul>
+  </div>
+
+  <!-- Opportunities -->
+  <div class="card">
+    <div class="card-title">فرص التحسين</div>
+    <ul id="rOpp" style="list-style:none;display:flex;flex-direction:column;gap:10px"></ul>
+  </div>
+
+  <!-- Priority -->
+  <div class="priority-box">
+    <div style="font-size:11px;font-weight:600;color:#8B6914;letter-spacing:1.4px;margin-bottom:8px">الأولوية الأولى</div>
+    <div id="rPri" style="font-size:14px;line-height:1.8;color:#1a1a1a"></div>
+  </div>
+
+  <!-- Booking -->
+  <div class="divider"></div>
+  <h2 style="font-size:22px;font-weight:700;margin-bottom:6px">تبغ تتعمق أكثر؟</h2>
+  <p style="font-size:14px;color:#666;margin-bottom:18px;line-height:1.7">احجز جلسة مجانية مع فريقنا — نحلل وضعك ونبني لك خطة واضحة</p>
+
+  <div style="display:inline-flex;align-items:center;gap:8px;padding:8px 16px;background:#f7f6f3;border-radius:40px;font-size:13px;margin-bottom:18px">
+    <span class="dpulse"></span>
+    أقرب موعد متاح: <strong id="bDate" style="color:#7A5C0F;margin-right:4px"></strong>
+  </div>
+
+  <div id="bForm" style="display:flex;flex-direction:column">
+    <label class="lbl">اسمك</label>
+    <input type="text" id="bName" placeholder="اسمك الكريم">
+    <label class="lbl">إيميل أو واتساب</label>
+    <input type="text" id="bContact" placeholder="للتواصل معك">
+    <label class="lbl">الوقت المفضل</label>
+    <select id="bTime">
+      <option value="">اختر</option>
+      <option>9:00 ص — 11:00 ص</option>
+      <option>11:00 ص — 1:00 م</option>
+      <option>2:00 م — 4:00 م</option>
+      <option>4:00 م — 6:00 م</option>
+    </select>
+    <button class="btn" onclick="book()">احجز موعدك المجاني</button>
+    <p style="text-align:center;font-size:12px;color:#aaa;margin-top:10px">سيتواصل معك الفريق خلال 24 ساعة</p>
+  </div>
+
+  <div id="bSuccess" style="display:none;text-align:center;padding:32px;background:#f7f6f3;border-radius:16px">
+    <div class="success-icon">✓</div>
+    <div style="font-size:18px;font-weight:700;margin-bottom:6px">تم تلقي طلبك</div>
+    <p style="font-size:14px;color:#666">سيتواصل معك فريقنا قريباً</p>
+  </div>
+
+</div>
+</div><!-- .page -->
+
+<script>
+const months=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+const dayNames=['الأحد','الاثنين','الثلاثاء','الأربعاء','الخميس','الجمعة','السبت'];
+let fd={};
+
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));document.getElementById(id).classList.add('on');window.scrollTo(0,0);}
+function togglePill(el){el.classList.toggle('sel');}
+function pick(lid,el){document.querySelectorAll('#'+lid+' .roption').forEach(r=>r.classList.remove('sel'));el.classList.add('sel');}
+
+function next1(){
+  if(!document.getElementById('bizName').value.trim()){alert('من فضلك أدخل اسم البزنس');return;}
+  if(!document.getElementById('bizSector').value){alert('من فضلك اختر مجال النشاط');return;}
+  show('s2');
+}
+function next2(){
+  if(!document.querySelector('#follList .sel')){alert('من فضلك اختر عدد المتابعين');return;}
+  if(!document.querySelector('#freqList .sel')){alert('من فضلك اختر تكرار النشر');return;}
+  show('s3');
+}
+function submitForm(){
+  if(!document.querySelector('#engList .sel')){alert('من فضلك اختر معدل التفاعل');return;}
+  if(!document.getElementById('challenge').value){alert('من فضلك اختر أكبر تحدٍّ');return;}
+  if(!document.getElementById('goal').value){alert('من فضلك اختر هدفك');return;}
+  if(!document.getElementById('userName').value.trim()){alert('من فضلك أدخل اسمك');return;}
+  if(!document.getElementById('userContact').value.trim()){alert('من فضلك أدخل طريقة التواصل');return;}
+  const plats=Array.from(document.querySelectorAll('#platGrid .pill.sel')).map(p=>p.textContent);
+  fd={
+    bizName:document.getElementById('bizName').value.trim(),
+    sector:document.getElementById('bizSector').value,
+    website:document.getElementById('bizWebsite').value.trim()||null,
+    platforms:plats,
+    followers:document.querySelector('#follList .sel').textContent,
+    freq:document.querySelector('#freqList .sel').textContent,
+    engagement:document.querySelector('#engList .sel').textContent,
+    challenge:document.getElementById('challenge').value,
+    goal:document.getElementById('goal').value,
+    userName:document.getElementById('userName').value.trim(),
+    userContact:document.getElementById('userContact').value.trim()
+  };
+  show('sLoad');
+  simulateAnalysis();
+}
+
+// رسائل التحليل
+const loadMsgs=['جارٍ تحليل حضورك الرقمي...','نقيّم المحتوى والتفاعل...','نقارن بالمنافسين في قطاعك...','نبني تقريرك الشخصي...'];
+let mi=0,mt;
+function startLoad(){mt=setInterval(()=>{document.getElementById('loadMsg').textContent=loadMsgs[mi=(mi+1)%loadMsgs.length];},1800);}
+function stopLoad(){clearInterval(mt);}
+
+// توليد نتيجة ذكية بناءً على الإجابات
+function simulateAnalysis(){
+  startLoad();
+  setTimeout(()=>{
+    stopLoad();
+    const result=buildResult();
+    renderResult(result);
+  }, 4000);
+}
+
+function buildResult(){
+  // حساب النقاط بناءً على الإجابات
+  let social=30, content=30, web=fd.website?50:0;
+
+  // المتابعين
+  if(fd.followers==='500 — 5,000') social+=15;
+  else if(fd.followers==='5,000 — 50,000') social+=30;
+  else if(fd.followers==='أكثر من 50,000') social+=40;
+
+  // تكرار النشر
+  if(fd.freq==='يومياً أو أكثر'){content+=35;}
+  else if(fd.freq==='3 — 4 مرات'){content+=25;}
+  else if(fd.freq==='مرة واحدة'){content+=10;}
+
+  // التفاعل
+  if(fd.engagement==='10 — 50 تفاعل'){social+=10;content+=10;}
+  else if(fd.engagement==='50 — 200 تفاعل'){social+=20;content+=20;}
+  else if(fd.engagement==='أكثر من 200 تفاعل'){social+=30;content+=30;}
+
+  // المنصات
+  if(fd.platforms.length>=3) social+=10;
+  if(fd.platforms.length>=5) social+=5;
+
+  // الموقع
+  if(fd.website) web=Math.min(web+20, 90);
+
+  // تحديد الحدود
+  social=Math.min(social,95); content=Math.min(content,95); web=Math.min(web,90);
+  const score=Math.round((social+(fd.website?web:social*0.5)+content)/( fd.website?3:2.5));
+
+  // نقاط القوة بناءً على الإجابات
+  const strengths=[];
+  if(fd.platforms.length>=3) strengths.push(`حضور متنوع على ${fd.platforms.length} منصات يوسّع قاعدة جمهورك`);
+  else strengths.push('لديك بداية رقمية واضحة يمكن البناء عليها');
+  if(fd.freq==='يومياً أو أكثر'||fd.freq==='3 — 4 مرات') strengths.push('انتظام في النشر — وهو أهم عامل في خوارزميات السوشيال');
+  else strengths.push('لديك وعي واضح بأهمية التواجد الرقمي');
+  if(fd.website) strengths.push('امتلاكك موقعاً إلكترونياً يعزز مصداقيتك ويدعم ظهورك في البحث');
+  else strengths.push(`التركيز على ${fd.sector} يمنحك فرصة لبناء جمهور متخصص`);
+
+  // فرص التحسين
+  const opportunities=[];
+  if(fd.engagement==='أقل من 10 تفاعلات') opportunities.push('التفاعل المنخفض يكشف فجوة في نوع المحتوى — محتوى يطرح أسئلة أو يحل مشكلة يرفع التفاعل 3 أضعاف');
+  else opportunities.push('يمكن مضاعفة التفاعل الحالي بتنويع أشكال المحتوى بين فيديو وبوست وستوري');
+  if(!fd.website) opportunities.push('غياب الموقع يعني فقدان عملاء يبحثون عنك على Google — صفحة بسيطة كافية للبداية');
+  else opportunities.push('تحسين ظهور موقعك في نتائج البحث يمكن أن يجلب عملاء جدد بدون إعلانات');
+  opportunities.push(`تحدي "${fd.challenge}" شائع في ${fd.sector} — والحل يبدأ بخطة محتوى شهرية واضحة الأهداف`);
+
+  // الأولوية
+  const priorityMap={
+    'إنتاج محتوى بانتظام':'ابدأ بجدول نشر أسبوعي ثابت — 3 بوستات تجيب على سؤال يطرحه جمهورك. الانتظام وحده يرفع الوصول العضوي بنسبة تصل إلى 40% خلال 30 يوماً',
+    'ضعف التفاعل والوصول':'حوّل 20% من بوستاتك لمحتوى تفاعلي: استطلاعات، أسئلة، تحديات. الخوارزميات تكافئ التفاعل الحقيقي بوصول أوسع بكثير',
+    'تحويل المتابعين لعملاء':'أضف CTA واضح لكل بوست — ليس "تواصل معنا" بل "احجز مجاناً اليوم" أو "أرسل كلمة X". المتابع يحتاج خطوة واضحة',
+    'بناء هوية بصرية واضحة':'ثبّت 3 ألوان، خط واحد، وقالب موحد لكل بوست. الهوية البصرية الثابتة ترفع التعرف على البراند بنسبة 80%',
+    'المنافسة في السوق':'ركّز على niche محدد بدل منافسة الجميع — كن الأول في فئتك الصغيرة وليس العاشر في السوق الكبير',
+    'ضعف الميزانية التسويقية':'ابدأ بـ 500 ريال شهرياً على Meta Ads مع استهداف دقيق لجمهورك — نتائج قابلة للقياس من اليوم الأول'
+  };
+  const priority=priorityMap[fd.challenge]||'ابدأ بخطة محتوى شهرية واضحة: 12 بوست، 4 أفكار رئيسية، وجدول نشر ثابت. الوضوح في التخطيط هو الفرق بين حساب ينمو وحساب يتوقف';
+
+  return{score:Math.min(score,92),socialScore:social,websiteScore:fd.website?web:null,contentScore:content,strengths,opportunities,priority};
+}
+
+function sc(n){
+  if(n===null) return '#aaa';
+  if(n>=70) return '#4caf72';
+  if(n>=40) return '#C8A84B';
+  return '#e85a4a';
+}
+function sl(n){
+  if(n>=80) return 'ممتاز';
+  if(n>=60) return 'جيد';
+  if(n>=40) return 'يحتاج تحسين';
+  return 'يحتاج عمل';
+}
+function bookDate(){
+  let d=new Date(),c=0;
+  while(c<5){d.setDate(d.getDate()+1);if(d.getDay()!==5&&d.getDay()!==6)c++;}
+  return d;
+}
+
+function renderResult(a){
+  const now=new Date();
+  document.getElementById('rName').textContent=fd.bizName;
+  document.getElementById('rDate').textContent=`${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
+  document.getElementById('rLabel').textContent=sl(a.score);
+
+  setTimeout(()=>{
+    document.getElementById('ring').style.strokeDashoffset=358-(a.score/100)*358;
+    let c=0;
+    const iv=setInterval(()=>{
+      c=Math.min(c+2,a.score);
+      document.getElementById('rScore').textContent=c;
+      if(c>=a.score)clearInterval(iv);
+    },20);
+  },250);
+
+  const ss=document.getElementById('mSocial');ss.textContent=a.socialScore;ss.style.color=sc(a.socialScore);
+  const ws=document.getElementById('mWeb');ws.textContent=a.websiteScore===null?'—':a.websiteScore;ws.style.color=sc(a.websiteScore);
+  const cs=document.getElementById('mContent');cs.textContent=a.contentScore;cs.style.color=sc(a.contentScore);
+
+  document.getElementById('rStr').innerHTML=a.strengths.map(s=>`
+    <li style="display:flex;gap:10px;font-size:14px;line-height:1.65;color:#1a1a1a;align-items:flex-start">
+      <span style="width:7px;height:7px;border-radius:50%;background:#4caf72;margin-top:6px;flex-shrink:0;display:inline-block"></span>${s}
+    </li>`).join('');
+
+  document.getElementById('rOpp').innerHTML=a.opportunities.map(o=>`
+    <li style="display:flex;gap:10px;font-size:14px;line-height:1.65;color:#1a1a1a;align-items:flex-start">
+      <span style="width:7px;height:7px;border-radius:50%;background:#C8A84B;margin-top:6px;flex-shrink:0;display:inline-block"></span>${o}
+    </li>`).join('');
+
+  document.getElementById('rPri').textContent=a.priority;
+
+  const bd=bookDate();
+  document.getElementById('bDate').textContent=`${dayNames[bd.getDay()]} ${bd.getDate()} ${months[bd.getMonth()]}`;
+  document.getElementById('bName').value=fd.userName;
+  document.getElementById('bContact').value=fd.userContact;
+
+  show('sResult');
+}
+
+function book(){
+  if(!document.getElementById('bName').value.trim()||!document.getElementById('bContact').value.trim()||!document.getElementById('bTime').value){
+    alert('من فضلك أكمل جميع حقول الحجز');return;
+  }
+  document.getElementById('bForm').style.display='none';
+  document.getElementById('bSuccess').style.display='block';
+}
+</script>
+</body>
+</html>
