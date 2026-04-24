@@ -351,13 +351,23 @@ function startLoad(){mt=setInterval(()=>{document.getElementById('loadMsg').text
 function stopLoad(){clearInterval(mt);}
 
 // توليد نتيجة ذكية بناءً على الإجابات
-function simulateAnalysis(){
+async function simulateAnalysis(){
   startLoad();
-  setTimeout(()=>{
+  try {
+    const r = await fetch('https://n8n.srv1555281.hstgr.cloud/webhook/scorecard-test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(fd)
+    });
+    const d = await r.json();
     stopLoad();
-    const result=buildResult();
+    renderResult(d);
+  } catch(e) {
+    // fallback to local calculation if n8n is unreachable
+    stopLoad();
+    const result = buildResult();
     renderResult(result);
-  }, 4000);
+  }
 }
 
 function buildResult(){
@@ -489,3 +499,4 @@ function book(){
 </script>
 </body>
 </html>
+
